@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<title>Сертификат + Сабақты тексеру тізімі</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#60a5fa,#3b82f6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: white;
+    padding: 50px;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.screen.active { display: flex; }
+h1 { color: #2563eb; font-size: 36px; margin-bottom: 10px; }
+h2 { font-size: 48px; margin: 20px 0; color: #1e3a8a; letter-spacing: 2px; }
+p { font-size: 20px; margin: 10px 0; }
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background: #22c55e;
+    color: white;
+    cursor: pointer;
+}
+.checklist { text-align: left; margin: 20px auto; max-width: 500px; font-size: 18px; }
+.checklist input { margin-right: 10px; transform: scale(1.2); }
+textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: vertical;
+}
+#status {
+    margin-top: 10px;
+    font-weight: bold;
+    color: green;
+}
+.confetti { position: fixed; width: 100%; height: 100%; pointer-events: none; top: 0; left: 0; z-index: 999; }
+</style>
+</head>
+<body>
+
+<!-- Чеклист экран -->
+<div class="screen active" id="checklistScreen">
+    <h1>📝 Сабақты меңгеруді тексеру тізімі</h1>
+    <div class="checklist">
+        <label><input type="checkbox" id="c1"> Компьютердің негізгі компоненттерін атай аламын</label><br>
+        <label><input type="checkbox" id="c2"> Енгізу, шығару құрылғыларын ажырата аламын</label><br>
+        <label><input type="checkbox" id="c3"> Құрылғылардың суреттерімен таныстым, толық меңгердім</label><br>
+        <label><input type="checkbox" id="c4"> Құрылғылардың қызметін түсіндіре аламын</label><br>
+        <label><input type="checkbox" id="c5"> Берілген тапсырмаларды орындай алдым</label><br><br>
+
+        <label for="future">Мен білгім келеді / Қосымша сұрақтар:</label><br>
+        <textarea id="future" rows="4" placeholder="Мысалы: Енгізу құрылғыларының ерекшеліктері туралы білгім келеді..."></textarea><br>
+        <button id="sendText">Жіберу</button>
+        <div id="status"></div>
+    </div>
+    <button id="finishChecklist" style="margin-top:15px;">Сертификатқа өту 🎉</button>
+</div>
+
+<!-- Сертификат экран -->
+<div class="screen" id="certificateScreen">
+    <h1>🏆 Құттықтаймыз!</h1>
+    <h2>СЕРТИФИКАТ</h2>
+    <p>Сіз «Компьютер құрылғылары» тақырыбын меңгердіңіз.</p>
+    <p>Барлық материалдарды қарап, тапсырмаларды орындадыңыз!</p>
+    <button onclick="window.print()">Сертификатты басып шығару 🖨️</button>
+</div>
+
+<canvas class="confetti" id="confetti"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+const checklistScreen = document.getElementById('checklistScreen');
+const certificateScreen = document.getElementById('certificateScreen');
+const finishBtn = document.getElementById('finishChecklist');
+const sendBtn = document.getElementById('sendText');
+const statusDiv = document.getElementById('status');
+
+sendBtn.addEventListener('click', () => {
+    const text = document.getElementById('future').value.trim();
+    if(text){
+        statusDiv.textContent = "Қабылданды ✅";
+        document.getElementById('future').value = "";
+    } else {
+        statusDiv.textContent = "Қабылданды ✅"; // бос болса да қабылданды деп көрсетеміз
+    }
+});
+
+finishBtn.addEventListener('click', () => {
+    checklistScreen.classList.remove('active');
+    certificateScreen.classList.add('active');
+    const myConfetti = confetti.create(document.getElementById('confetti'), { resize: true });
+    myConfetti({ particleCount: 150, spread: 120, origin: { y: 0.6 } });
+});
+</script>
+
+</body>
+</html>
